@@ -3,7 +3,7 @@
 # --- Function to check command success and exit if it fails (Fail Fast Principle) ---
 check_status() {
   if [ $? -ne 0 ]; then
-    echo "🚨 ERROR: Quality Gate failed at stage: $1"
+    echo "ERROR: Quality Gate failed at stage: $1"
     exit 1
   fi
 }

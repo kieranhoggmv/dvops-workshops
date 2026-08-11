@@ -1,6 +1,6 @@
 import pytest
-from db_mock import mock_payment_database_query
-from validator import validate_user_id
+from module4.unit3.python.db_mock import mock_payment_database_query
+from module4.unit3.python.validator import validate_user_id
 
 
 def test_successful_payment_status_integration():
