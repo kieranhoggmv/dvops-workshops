@@ -1,5 +1,5 @@
 import pytest
-from module4.unit3.python.validator import validate_user_id
+from validator import validate_user_id
 
 
 # -----------------
