@@ -1,0 +1,40 @@
+name: Unit 2
+on: [push]
+
+# Default env values for Blue deployments
+env:
+  PORT: 8080
+  APP_VERSION: 1.0.0
+  BLUE_GREEN: blue
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Package Application (Build Image)
+        run: |
+          echo "Executing application compilation and container packaging..."
+          docker build --tag retailstream:${{ env.APP_VERSION }} .
+  
+  deploy:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Execute Blue/Green Deployment
+        run: |
+          docker run --detach \
+            --name retailstream-${{ env.BLUE_GREEN }} \
+            --publish ${{ env.PORT }}:8080 \
+            --env APP_VERSION="${{ env.APP_VERSION }}" \
+            retailstream:${{ env.APP_VERSION }}
+
+      - name: Healthcheck
+        run: |
+          sleep 5
+          curl --silent --fail localhost:${{ env.PORT }}

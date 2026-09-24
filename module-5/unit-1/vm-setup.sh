@@ -41,7 +41,6 @@ echo 'alias act="gh act --action-offline-mode"' >> ~/.bashrc
 mkdir -p ~/.config/act
 tee ~/.config/act/actrc <<EOF
 -P ubuntu-latest=catthehacker/ubuntu:act-latest
--s GITHUB_TOKEN=${GH_TOKEN}
 EOF
 
 # Verify versions

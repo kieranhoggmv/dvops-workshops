@@ -1,0 +1,30 @@
+name: Unit 5
+
+on: [push]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      AZURE_STORAGE_CONNECTION_STRING: "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://localhost:10000/devstoreaccount1;"
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v7
+
+      - name: Run Azurite
+        run: bash azurite.sh
+
+      - name: Create Storage Container
+        run: bash deploy.sh create-container
+
+      - name: Install dependencies
+        run: |
+          apt update
+          apt install jq curl -y
+          curl -fsSL 'https://azurecliprod.blob.core.windows.net/$root/deb_install.sh' | sudo bash
+
+      - name: Verify File Exists
+        run: bash deploy.sh check-exists
+
+    - name: Upload File
+      run: bash deploy.sh upload-file

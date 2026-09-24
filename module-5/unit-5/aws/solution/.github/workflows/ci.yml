@@ -10,15 +10,13 @@ jobs:
       AWS_ACCESS_KEY_ID: test
       AWS_SECRET_ACCESS_KEY: test
       COM_ADOBE_TESTING_S3MOCK_STORE_REGION: eu-west-2
+      CHECKSUM: 03ba204e50d126e4674c005e04d82e84c21366780af1f43bd54a37816b6ab340
     steps:
       - name: Checkout Source
         uses: actions/checkout@v7
 
       - name: Run S3 Mock
-        run: ./s3mock.sh
-
-      - name: Create S3 Bucket
-        run: ./deploy.sh create-bucket
+        run: bash s3mock.sh
 
       - name: Install dependencies
         run: |
@@ -26,10 +24,16 @@ jobs:
           apt install jq curl less -y
           curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.35.23.zip" -o "awscliv2.zip" && \
           unzip awscliv2.zip && \
-          sudo ./aws/install
+          sudo bash aws/install
+
+      - name: Create S3 Bucket
+        run: bash deploy.sh create-bucket
+
+      - name: Upload File
+        run: bash deploy.sh upload-file
 
       - name: Verify File Exists
-        run: ./deploy.sh check-exists
+        run: bash deploy.sh check-exists
 
-    - name: Upload File
-      run: ./deploy.sh upload-file
+      - name: Verify File Checksum
+        run: bash deploy.sh validate-checksum

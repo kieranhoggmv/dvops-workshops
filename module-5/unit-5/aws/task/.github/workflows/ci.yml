@@ -1,0 +1,35 @@
+name: Unit 5
+
+on: [push]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      AWS_ENDPOINT_URL: http://localhost:9090
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      COM_ADOBE_TESTING_S3MOCK_STORE_REGION: eu-west-2
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v7
+
+      - name: Run S3 Mock
+        run: bash s3mock.sh
+
+      - name: Create S3 Bucket
+        run: bash deploy.sh create-bucket
+
+      - name: Install dependencies
+        run: |
+          apt update
+          apt install jq curl less -y
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.35.23.zip" -o "awscliv2.zip" && \
+          unzip awscliv2.zip && \
+          sudo bash aws/install
+
+      - name: Verify File Exists
+        run: bash deploy.sh check-exists
+
+    - name: Upload File
+      run: bash deploy.sh upload-file
