@@ -1,5 +1,4 @@
 # Unit 3 lab: Debugging CI Pipelines
-___
 
 ## Scenario
 
@@ -9,7 +8,6 @@ To solve this efficiently, you will use `act` to test and fix the workflow. This
 
 The final deployment is a run of the `app.py` application, which runs on port `8080`.
 
-===
 
 ## Task 1: Run the current workflow and review
 
@@ -19,7 +17,6 @@ First we must understand what doesn't work!
 1. Review the workflow file at `.github/workflows/ci.yml`.
 1. Make a note of any observations or potential changes you identify.
 
-===
 
 ## Task 2: Fix the workflow error(s)
 
@@ -36,7 +33,6 @@ This tells you where, and in what file, the error can be found.
 
 **Note: The pipeline will FAIL to succeed. The aim here is to get it to run!**
 
-===
 
 ## Task 3: Correct the order and apply fixes
 
@@ -50,7 +46,6 @@ Hopefully when you reviewed the `ci.yml` file you spotted that the steps were in
 
 _Hint: There is a missing `pytest==9.1.1` requirement and broken tests._
 
-===
 
 ## Task 4: Add a new `deploy` job
 
