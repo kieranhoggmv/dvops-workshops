@@ -1,8 +1,6 @@
 
 # Workshop 5: Deploying to AWS/Azure via CI/CD
 
-___
-
 Solution walkthrough: https://www.youtube.com/watch?v=cs7GK34ba4k
 
 ## Scenario
@@ -11,16 +9,12 @@ A local startup, CloudKart, is trying to automate the deployment of a required a
 
 They have asked you to debug the pipeline locally to avoid cluttering the repository history with failed commits, fix the workflow and ensure that the uploaded file is correct.
 
-===
-
 ## Task 1: Review the workflow and deployment script
 
 1. Locate the `.github/workflows/ci.yml` file and the associated `deploy.sh` shell script, and review them to understand the intended pipeline stages.
 1. Attempt to run the current workflow as-is using `act push`.
 
 Can you tell what's wrong with either file at this stage?
-
-===
 
 ## Task 2: Fix the workflow
 
@@ -33,8 +27,6 @@ When working through the files, consider the following:
 1. Ensure the DSL is valid and in the correct order.
 1. Check the log output!
 
-===
-
 ## Task 3: Add a `validate-checksum` step
 
 In order to ensure the uploaded file is correct, you need to add the missing `validate-checksum` step to the workflow.  
@@ -45,7 +37,6 @@ Ensure that the pipeline succeeds with `act push`.
 
 _Tip: Generate a SHA256 checksum for the upload file using `sha256sum [FILE]` and capture the hash output._
 
-===
 
 ## Task 4: Modify the uploaded file
 

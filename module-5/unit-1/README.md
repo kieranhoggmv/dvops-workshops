@@ -1,7 +1,5 @@
 # Unit 1 Lab: Pipeline Orchestration with GitHub Actions
 
-___
-
 Solution walkthrough: https://youtu.be/pmwDrLVJuDQ
 
 ## Scenario
@@ -17,9 +15,6 @@ Upon initial inspection of the workflow file, you notice two critical structural
 
 Your objective is to optimise the pipeline orchestration to fail fast, diagnose the failure using local terminal logs, and fix the codebase to achieve a successful, verified pipeline execution.
 
-
-===
-
 ## Task 1: Run the workflow
 
 In this workshop, you will be using an open source tool called `act`.  
@@ -31,8 +26,6 @@ This provides instant feedback and prevents broken experiments from cluttering y
 1. Watch the terminal output carefully. You will notice the tool pulling down the necessary Docker images and starting the jobs defined in your workflow.
 1. Allow the process to run until it fails. Pay close attention to how much time elapses before the terminal reports the failure.
 
-===
-
 ## Task 2: Analyse the Structural Bottleneck
 
 Now that you have observed the pipeline failing slowly, you need to understand why it was orchestrated this way.  
@@ -42,8 +35,6 @@ If these instructions are executed in the wrong order, the pipeline becomes a ma
 1. Open the workflow file with Vim: `vim .github/workflows/ci.yml`.
 1. Scroll down to the jobs or steps section of the YAML file.
 1. Identify the sequence of execution. You will see that a heavy, slow task (such as building a Docker container image or compiling complex dependencies) is listed before the lightweight tasks (such as running static code analysis or linting checks).
-
-===
 
 ## Task 3: Implement the Fail-Fast Principle
 
@@ -59,8 +50,6 @@ If a fast check fails, the pipeline aborts immediately, saving time and valuable
 1. Execute the local runner command again: `act`.
 1. Observe the live execution logs.
 
-===
-
 ## Task 4: Diagnose and Fix the Codebase Error
 The pipeline is now highly efficient, but the application source code is still broken.  
 As a DevOps engineer, you will often need to parse raw console logs to help developers identify exactly where their code is failing.  
@@ -71,8 +60,6 @@ Visual UI dashboards might show a red "failed" badge, but the raw text logs hold
 1. Locate the error trace. The linter will explicitly state the name of the Python file, the exact line number, and the specific syntax error (e.g. an unexpected indent or a missing bracket).
 1. Open the offending Python file in your text editor.
 1. Navigate to the line specified in the logs, fix the syntax mistake, and save the file.
-
-===
 
 ## Task 5: Verify a Successful Green Run
 The final step in any pipeline orchestration task is to verify that all components work together harmoniously to produce a successful outcome.  
