@@ -1,0 +1,65 @@
+name: Unit 7
+
+on: [push]
+
+jobs:
+  build:
+    name: Build and Package Artifact
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      - name: Build Docker Image
+        run: |
+          docker build -t u7-api:${{ github.sha }} .
+          docker save -o u7-api-image.tar u7-api:${{ github.sha }}
+
+      - name: Upload Built Image Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: u7-api-artifact
+          path: u7-api-image.tar
+          retention-days: 1
+
+  deploy-staging:
+    name: Deploy to Staging Environment
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      - name: Download Built Image Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: u7-api-artifact
+
+      - name: Load Docker Image
+        run: docker load -i u7-api-image.tar
+
+      - name: Run Staging Deployment Script
+        env:
+          API_URL: "http://staging-api.internal"
+        run: bash deploy.sh
+
+  deploy-production:
+    name: Deploy to Production Environment
+    runs-on: ubuntu-latest
+    needs: [build, deploy-staging]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Download Built Image Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: u7-api-artifact
+
+      - name: Load Docker Image
+        run: docker load -i u7-api-image.tar
+
+      - name: Run Production Deployment Script
+        env:
+          API_URL: "http://prod-api.internal"
+        run: bash deploy.sh

@@ -1,0 +1,30 @@
+name: Unit 7
+
+on: [push]
+
+jobs:
+  deploy-staging:
+    name: Deploy to Staging Environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      - name: Build Docker Image
+        run: docker build -t u7-api:latest .
+
+      - name: Run Staging Deployment Script
+        run: bash deploy.sh
+
+  deploy-production:
+    name: Deploy to Production Environment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        run: docker build -t u7-api:latest .
+
+      - name: Run Production Deployment Script
+        run: bash deploy.sh
