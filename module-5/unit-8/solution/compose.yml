@@ -1,0 +1,23 @@
+services:
+
+  app:
+    image: u8-api:${APP_VERSION}
+    build: .
+    ports:
+      - ${API_PORT}:8080
+    environment:
+      - DB_HOST=db
+      - DB_PORT=${POSTGRES_PT}
+      - DB_USER=${POSTGRES_US}
+      - DB_PASS=${POSTGRES_PW}
+      - DB_NAME=${POSTGRES_DB}
+      - VERSION=${APP_VERSION}
+
+  db:
+    image: postgres:18.4
+    ports:
+      - ${POSTGRES_PT}:5432
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_US}
+      - POSTGRES_PASSWORD=${POSTGRES_PW}

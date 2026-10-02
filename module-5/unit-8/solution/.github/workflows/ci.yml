@@ -1,0 +1,56 @@
+name: Unit 8
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+env:
+  POSTGRES_PW: unit8pw
+  POSTGRES_DB: api
+  POSTGRES_US: admin
+  POSTGRES_PT: 5432
+  API_PORT: 8080
+
+jobs:
+  init:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      - name: Create initial stack
+        run: |
+          export APP_VERSION=$(echo "${{ github.ref_name }}" | tr '/' '-')
+          docker compose up -d
+
+      - name: Install PostgreSQL Client
+        run: |
+          sudo apt update
+          sudo apt install postgresql-client -y
+
+      - name: Run DB initialisation
+        run: bash db-init.sh
+        env:
+          PGPASSWORD: ${{ env.POSTGRES_PW }}
+
+  migrate:
+    needs: init
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v7
+
+      - name: Recreate the app stack
+        run: |
+          export APP_VERSION=$(echo "${{ github.ref_name }}" | tr '/' '-')
+          docker compose up -d
+
+      - name: Install PostgreSQL Client
+        run: |
+          sudo apt update
+          sudo apt install postgresql-client -y
+
+      - name: Execute in-live DB migration
+        env:
+          PGPASSWORD: ${{ env.POSTGRES_PW }}
+        run: bash db-migrate.sh
